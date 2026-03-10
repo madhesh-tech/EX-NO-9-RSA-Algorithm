@@ -1,5 +1,6 @@
 # EX-NO-9-RSA-Algorithm
-
+## NAME : MADHESH I
+## REG.NO : 212224220055
 ## AIM:
 To Implement RSA Encryption Algorithm in Cryptography
 
@@ -36,11 +37,56 @@ Step 5: **Security Foundation
 The security of RSA relies on the difficulty of factoring large numbers; thus, choosing sufficiently large prime numbers for \( p \) and \( q \) is crucial for security.
 
 ## Program:
-
+```
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+int gcd(int a, int b) {
+    return b ? gcd(b, a % b) : a;
+}
+int modExp(int base, int exp, int mod) {
+    int res = 1;
+    while (exp) {
+        if (exp & 1) res = (res * base) % mod;
+        base = (base * base) % mod;
+        exp >>= 1;
+    }
+    return res;
+}
+int modInv(int a, int m) {
+    int m0 = m, x0 = 0, x1 = 1;
+    while (a > 1) {
+        int q = a / m, t = m;
+        m = a % m; a = t;
+        t = x0; x0 = x1 - q * x0; x1 = t;
+    }
+    return (x1 < 0) ? x1 + m0 : x1;
+}
+int main() {
+    int p = 61, q = 53;
+    int n = p * q;
+    int phi = (p - 1) * (q - 1);
+    int e = 17;
+    while (gcd(e, phi) != 1) e++;
+    int d = modInv(e, phi);
+    char msg[100];
+    printf("Enter plaintext: ");
+    scanf("%s", msg);
+    printf("Encrypted: ");
+    for (int i = 0; msg[i]; i++)
+        printf("%d ", modExp(msg[i], e, n));
+    printf("\nDecrypted: ");
+    for (int i = 0; msg[i]; i++) {
+        char ch = modExp(modExp(msg[i], e, n), d, n);
+        printf("%c", toupper(ch));
+    }
+}
+```
 
 
 
 ## Output:
+<img width="1620" height="938" alt="image" src="https://github.com/user-attachments/assets/46796c61-490d-4431-900b-0adc0dd4e7b6" />
 
 
 
